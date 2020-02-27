@@ -14,6 +14,9 @@ with open(os.path.join(os.path.dirname(__file__), 'index.html'), 'rb') as file:
 with open(os.path.join(os.path.dirname(__file__), 'favicon.png'), 'rb') as file:
     favicon = file.read()  # read the favicon
 
+with open(os.path.join(os.path.dirname(__file__), '404.html'), 'rb') as file:
+    not_found = file.read()  # read the not found page
+
 with socket(AF_INET, SOCK_STREAM) as sock:  # create a socket named sock
     sock.bind((HOST, PORT))
     sock.listen()  # listen for incoming connection requests
@@ -37,3 +40,8 @@ Content-Type: text/html
                 conn.sendall(b'''HTTP/1.1 200 OK
 Content-Type: image/apng
 \n''' + favicon)
+
+            else:  # unknown page but currently calls on pages like index.css as well
+                conn.sendall(b'''HTTP/1.1 404 Not not_found
+Content-Type: text/html
+\n''' + not_found)
